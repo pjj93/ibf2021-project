@@ -46,6 +46,7 @@ public class TwitterRestController {
     @PostMapping(path="/stream/rules")
     public ResponseEntity<String> addRule() {
 
+        twitterSvc.addRule("posttry", "testuser69420", "post from server");
         return null;
     }
 

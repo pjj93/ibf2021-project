@@ -6,12 +6,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 import pjj.ibf2021project.server.ServerApplication;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class TwitterService {
@@ -89,5 +96,51 @@ public class TwitterService {
                 }
             }
         });
+    }
+
+    public void addRule(String value, String from, String description) {
+        
+        value = "posttry";
+        from = "testuser69420";
+        description = "post from server";
+
+        JsonObject addJsonObj = Json.createObjectBuilder()
+                                    .add("value", "%s -is:retweet -is:reply from:%s".formatted(value, from))
+                                    .add("tag", description)
+                                    .build();
+
+        JsonArray addJsonArr = Json.createArrayBuilder()
+                                    .add(addJsonObj)
+                                    .build();
+
+        JsonObject jsonBody = Json.createObjectBuilder()
+                                    .add("add", addJsonArr)
+                                    .build();
+
+        Mono<ResponseEntity<String>> response = webclient.post()
+            .uri("/tweets/search/stream/rules")
+            .header("Authorization", "Bearer " + ENV_TWITTER_BEARER_TOKEN)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(jsonBody.toString()))
+            .retrieve()
+            .toEntity(String.class);
+        
+        Disposable resp = 
+                response.subscribe(i -> {
+                    int httpstatus = i.getStatusCodeValue();
+                    String respBody = i.getBody();
+                    logger.log(Level.INFO, "status code >>> " + httpstatus);
+                    logger.log(Level.INFO, "response >>> " + respBody);
+                });
+        
+        //// Synchronous call
+        /*  ResponseEntity<String> response = webclient.post()
+                .uri("/tweets/search/stream/rules")
+                .header("Authorization", "Bearer " + ENV_TWITTER_BEARER_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(jsonBody.toString()))
+                .retrieve()
+                .toEntity(String.class)
+                .block(); */
     }
 }
