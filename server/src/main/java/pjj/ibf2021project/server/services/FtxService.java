@@ -21,7 +21,7 @@ public class FtxService {
     
     private static final String FTX_KEY = System.getenv("FTX_KEY");
     private static final String FTX_SECRET = System.getenv("FTX_SECRET");
-    // private static final String FTX_SUBACCOUNT = "Bot";
+    private static final String FTX_SUBACCOUNT = "Bot";
     private final WebClient webclient;
 
     public FtxService (WebClient.Builder webClientBuilder) {
@@ -29,7 +29,7 @@ public class FtxService {
                     webClientBuilder.baseUrl("https://ftx.com")
                                 .defaultHeaders(httpHeaders -> {
                                     httpHeaders.set("FTX-KEY", FTX_KEY);
-                                    // httpHeaders.set("FTX-SUBACCOUNT", FTX_SUBACCOUNT);
+                                    httpHeaders.set("FTX-SUBACCOUNT", FTX_SUBACCOUNT);
                                     httpHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
                                 })
                                 .build();
