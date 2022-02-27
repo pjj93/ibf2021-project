@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import pjj.ibf2021project.server.ServerApplication;
+import reactor.core.publisher.Mono;
 
 @Service
 public class FtxService {
@@ -39,24 +40,22 @@ public class FtxService {
         String timestamp = Long.toString(System.currentTimeMillis());
         String signature_payload = timestamp + "GET" + "/api/wallet/balances";
 
-        ResponseEntity<String> response = webclient.get()
+        Mono<ResponseEntity<String>> response = webclient.get()
             .uri("/api/wallet/balances")
             .header("FTX-TS", timestamp)
             .header("FTX-SIGN", calcHmacSha256(signature_payload))
             .retrieve()
-            .toEntity(String.class)
-            .block();
+            .toEntity(String.class);
 
-        int httpstatus = response.getStatusCodeValue();
-        String respBody = response.getBody();
-        
-        logger.log(Level.INFO, "status code >>> " + httpstatus);
-        logger.log(Level.INFO, "response >>> " + respBody);
+        response.subscribe(i -> {
+            int httpstatus = i.getStatusCodeValue();
+            String respBody = i.getBody();
+            logger.log(Level.INFO, "status code >>> " + httpstatus);
+            logger.log(Level.INFO, "response >>> " + respBody);
+        });
     }
 
     public String calcHmacSha256(String message) {
-
-        logger.log(Level.INFO, "signature payload >>> " + message);
 
         byte[] hmacSha256 = null;
         try {
@@ -67,8 +66,6 @@ public class FtxService {
         } catch (Exception e) {
           throw new RuntimeException("Failed to calculate hmac-sha256", e);
         }
-
-        logger.log(Level.INFO, "hashed signature >>> " + Hex.encodeHexString(hmacSha256));
         
         return Hex.encodeHexString(hmacSha256);
       }

@@ -16,7 +16,6 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import pjj.ibf2021project.server.ServerApplication;
-import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -125,13 +124,12 @@ public class TwitterService {
             .retrieve()
             .toEntity(String.class);
         
-        Disposable resp = 
-                response.subscribe(i -> {
-                    int httpstatus = i.getStatusCodeValue();
-                    String respBody = i.getBody();
-                    logger.log(Level.INFO, "status code >>> " + httpstatus);
-                    logger.log(Level.INFO, "response >>> " + respBody);
-                });
+        response.subscribe(i -> {
+            int httpstatus = i.getStatusCodeValue();
+            String respBody = i.getBody();
+            logger.log(Level.INFO, "status code >>> " + httpstatus);
+            logger.log(Level.INFO, "response >>> " + respBody);
+        });
         
         //// Synchronous call
         /*  ResponseEntity<String> response = webclient.post()
