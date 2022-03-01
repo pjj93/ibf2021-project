@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -12,9 +13,8 @@ export class SignupComponent implements OnInit {
 
   password: String = "";
   confirmpassword: String = "";
-  validatepassword: boolean = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -25,14 +25,10 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(form: any) {
-    console.log("username: " + form.username)
-    console.log("password: " + form.password)
-    console.log("confirm password: " + form.confirmpassword)
+    console.log(form)
+    this.http.post("http://localhost:8080/signup", form).subscribe(response => {
+      console.log("response >>> " + JSON.stringify(response))
+    })
   }
 
-  validatePassword() {
-    if (this.password == this.confirmpassword) {
-      this.validatepassword = true;
-    }
-  }
 }
