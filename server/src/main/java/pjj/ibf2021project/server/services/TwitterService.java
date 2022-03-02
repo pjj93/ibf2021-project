@@ -15,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
-import pjj.ibf2021project.server.ServerApplication;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -27,7 +26,7 @@ public class TwitterService {
 
     private final WebClient webclient;
 
-    private Logger logger = Logger.getLogger(ServerApplication.class.getName());
+    private Logger logger = Logger.getLogger(TwitterService.class.getName());
 
     public TwitterService(WebClient.Builder webClientBuilder) {
         this.webclient = webClientBuilder.baseUrl("https://api.twitter.com/2").build();

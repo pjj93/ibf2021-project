@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pjj.ibf2021project.server.ServerApplication;
 import pjj.ibf2021project.server.services.TwitterService;
 
 @RestController
@@ -23,7 +22,7 @@ public class TwitterRestController {
     @Autowired
     private TwitterService twitterSvc;
 
-    private Logger logger = Logger.getLogger(ServerApplication.class.getName());
+    private Logger logger = Logger.getLogger(TwitterRestController.class.getName());
 
     @GetMapping(path="/user/{username}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getUser(@PathVariable String username) {

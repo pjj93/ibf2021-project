@@ -13,12 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import pjj.ibf2021project.server.ServerApplication;
 import reactor.core.publisher.Mono;
 
 @Service
 public class FtxService {
-    private Logger logger = Logger.getLogger(ServerApplication.class.getName());
+    private Logger logger = Logger.getLogger(FtxService.class.getName());
     
     private static final String FTX_KEY = System.getenv("FTX_KEY");
     private static final String FTX_SECRET = System.getenv("FTX_SECRET");

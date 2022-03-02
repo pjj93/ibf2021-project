@@ -8,15 +8,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import pjj.ibf2021project.server.ServerApplication;
-
 @Service
 public class EmailService{
     
     @Autowired
     private JavaMailSender emailSender;
 
-    private Logger logger = Logger.getLogger(ServerApplication.class.getName());
+    private Logger logger = Logger.getLogger(EmailService.class.getName());
     
     public void sendEmail(String resp) {
 
