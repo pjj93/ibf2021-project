@@ -18,7 +18,7 @@ create table twitter(
     `value` varchar(256),
     tag varchar(32),
     primary key(rule_id)
-)
+);
 
 insert into 
     twitter(rule_id, `value`, `tag`) 
@@ -30,6 +30,26 @@ create table subscription(
     username varchar(64) not null,
     rule_id varchar(20) not null,
     email_notification enum("yes", "no") default "yes" not null,
-    auto_trade enum("yes", "no") default "no" not null
-)
+    auto_trade enum("yes", "no") default "no" not null,
+    constraint fk_subscription_username
+        foreign key(username)
+        references user(username)
+        on delete cascade
+        on update restrict,
+    constraint fk_rule_id
+        foreign key(rule_id)
+        references twitter(rule_id)
+        on delete cascade
+        on update restrict
+);
 
+create table ftx(
+    api_key char(40) not null,
+    api_secret char(40) not null,
+    username varchar(64) not null,
+    constraint fk_ftx_username
+        foreign key(username)
+        references user(username)
+        on delete cascade
+        on update restrict
+);
