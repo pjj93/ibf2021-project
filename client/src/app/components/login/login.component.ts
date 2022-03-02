@@ -10,7 +10,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class LoginComponent implements OnInit {
 
   form!: FormGroup;
-  password!: String;
   fieldTextType: boolean = false;
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
