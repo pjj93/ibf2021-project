@@ -12,20 +12,22 @@
     <div class="mt-4 row">
       <h4><label for="password" class="input-group">Password</label></h4>
       <div class="input-group">
-        <input type="password" name="password" class="form-control" placeholder="Enter a password"formControlName="password" [(ngModel)]="password">
+        <input type="password" name="password" class="form-control" placeholder="Enter a password"formControlName="password">
       </div>
-      <small class="form-text text-danger" *ngIf="(password.length < 6) && form.controls['password'].dirty">Password must be at least 6 characters</small>
+      <small class="form-text text-danger" *ngIf="form.get('password')?.hasError('minlength') && form.controls['password'].dirty">Password must be at least 6 characters</small>
     </div>
     <div class="mt-4 row">
       <h4><label for="confirmpassword">Confirm Password</label></h4>
       <div class="input-group">
-      <input type="password" name="confirmpassword" class="form-control" placeholder="Enter password again" formControlName="confirmpassword" [(ngModel)]="confirmpassword">
+      <input type="password" name="confirmpassword" class="form-control" placeholder="Enter password again" formControlName="confirmpassword">
       </div>
-      <small class="form-text text-danger" *ngIf="(!(password == confirmpassword) && form.controls['password'].dirty && form.controls['confirmpassword'].dirty)">Password does not match</small>
+      <small class="form-text text-danger" *ngIf="form.hasError('notSame') && form.controls['password'].dirty && form.controls['confirmpassword'].dirty">
+        Passwords do not match
+      </small>
     </div>
     <div class="row mt-5">
       <div class="col">
-        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || (password != confirmpassword)">Register</button>
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || form.hasError('notSame')">Register</button>
       </div>
     </div>
   </form>

@@ -25,4 +25,8 @@ public class DatabaseService {
             return false;
         }
     }
+
+    public boolean loginUser(String username, String password) {
+        return appRepo.hasUser(username, password);
+    }
 }

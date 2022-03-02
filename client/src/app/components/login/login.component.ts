@@ -24,9 +24,9 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: any) {
     console.log(form)
-/*     this.http.post("http://localhost:8080/signup", form).subscribe(response => {
+    this.http.post("http://localhost:8080/login", form).subscribe(response => {
       console.log("response >>> " + JSON.stringify(response))
-    }) */
+    })
   }
 
   toggleFieldTextType() {

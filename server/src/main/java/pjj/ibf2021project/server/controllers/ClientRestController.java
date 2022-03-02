@@ -56,4 +56,29 @@ public class ClientRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
         }
     }
+
+    @PostMapping(path="/login", consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> login(@RequestBody String json) {
+
+        JsonReader reader = Json.createReader(new ByteArrayInputStream(json.getBytes()));
+        JsonObject jsonObj = reader.readObject();
+
+        String username = jsonObj.getString("username");
+        String password = jsonObj.getString("password");
+        
+        boolean isLogin = databaseSvc.loginUser(username, password);
+
+        if(isLogin) {
+            response = Json.createObjectBuilder()
+                        .add("status", "success")
+                        .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+        } else {
+            response = Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("message", "unable to login")
+                        .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
+        }
+    }
 }

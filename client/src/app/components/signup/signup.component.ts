@@ -21,7 +21,7 @@ export class SignupComponent implements OnInit {
       username: this.fb.control('', [Validators.required, Validators.email]),
       password: this.fb.control('', [Validators.required, Validators.minLength(6)]),
       confirmpassword: this.fb.control('', [Validators.required, Validators.minLength(6)])
-    })
+    }, { validator: this.checkPasswords })
   }
 
   onSubmit(form: any) {
@@ -30,5 +30,14 @@ export class SignupComponent implements OnInit {
       console.log("response >>> " + JSON.stringify(response))
     })
   }
+
+  checkPasswords(group: FormGroup) {
+    const pass = group.controls["password"].value;
+    const confirmPass = group.controls["confirmpassword"].value;
+
+    return pass === confirmPass ? null : { notSame: true };
+  }
+
+
 
 }
