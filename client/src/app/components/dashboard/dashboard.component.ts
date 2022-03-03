@@ -12,8 +12,11 @@ import { Subscription } from 'src/app/models';
 })
 export class DashboardComponent implements OnInit {
 
+  itemButtonText: string = "Edit";
+  editMode: boolean = false;
   username: string = "jian_jun3@hotmail.com";
   getSubscription!: Observable<any>;
+  selectedSubscription!: Subscription;
   subscriptions: Subscription[] = [];
   constructor(private http: HttpClient, private appSvc: AppService) { }
 
@@ -26,6 +29,16 @@ export class DashboardComponent implements OnInit {
       console.log(this.subscriptions)
       console.log(this.subscriptions.length)
     })
+
+  }
+
+  onItemButtonClick(subscription: Subscription) {
+    this.editMode = true;
+    this.selectedSubscription = subscription;
+  }
+
+  onItemButtonSave() {
+    this.editMode = false;
 
   }
 

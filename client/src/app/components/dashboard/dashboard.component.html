@@ -1,24 +1,66 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col">
+      <h4 class="mt-5 mb-3">Active Subscriptions</h4>
       <table class="table">
         <thead class="table-dark">
           <tr>
-            <th scope="col">#</th>
+            <!-- <th scope="col">#</th> -->
             <th scope="col">Tag</th>
+            <th scope="col">Description</th>
             <th scope="col">Email Notification</th>
             <th scope="col">Auto Trade</th>
+            <th></th>
           </tr>
         </thead>
-        <tbody >
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+        <tbody>
+          <tr *ngFor="let subscription of subscriptions; index as i">
+            <!-- <th scope="row">{{i + 1}}</th> -->
+            <td>{{subscription?.tag | titlecase }}</td>
+            <td>{{subscription?.description | titlecase}}</td>
+            <td>{{subscription?.email_notification}}</td>
+            <td>{{subscription?.auto_trade}}</td>
+            <td>
+              <button
+              class="btn-sm btn-dark"
+              (click)="onItemButtonClick(subscription)"
+              [disabled]="editMode">
+              {{itemButtonText}}
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
+      <div [hidden]="!editMode">
+        <h4 class="mt-5 mb-3">Edit Subscription</h4>
+        <table class="table" >
+          <thead class="table-secondary">
+            <tr>
+              <th scope="col">Tag</th>
+              <th scope="col">Description</th>
+              <th scope="col">Email Notification</th>
+              <th scope="col">Auto Trade</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{selectedSubscription?.tag | titlecase}}</td>
+              <td>{{selectedSubscription?.description | titlecase}}</td>
+              <td>{{selectedSubscription?.email_notification}}</td>
+              <td>{{selectedSubscription?.auto_trade}}</td>
+              <td>
+                <button
+                class="btn-sm btn-dark"
+                (click)="onItemButtonSave()"
+                [disabled]="!editMode">
+                Save
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

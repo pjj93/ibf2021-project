@@ -1,8 +1,8 @@
 export interface Subscription {
-  rule_id: String,
-  username: String,
-  tag: String,
-  email_notification: String,
-  auto_trade: String,
-  description: String
+  rule_id: string,
+  username: string,
+  tag: string,
+  email_notification: string,
+  auto_trade: string,
+  description: string
 }
