@@ -34,7 +34,7 @@ public class ClientRestController {
 
     JsonObject response;
     
-    @PostMapping(path="/signup", consumes=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="/api/client/signup", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> signup(@RequestBody String json) {
 
         JsonReader reader = Json.createReader(new ByteArrayInputStream(json.getBytes()));
@@ -59,7 +59,7 @@ public class ClientRestController {
         }
     }
 
-    @PostMapping(path="/login", consumes=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="/api/client/login", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> login(@RequestBody String json) {
 
         JsonReader reader = Json.createReader(new ByteArrayInputStream(json.getBytes()));
@@ -84,10 +84,19 @@ public class ClientRestController {
         }
     }
 
-    @GetMapping(path="/dashboard")
+    // @GetMapping(path="/dashboard")
+    // public ResponseEntity<String> dashboard(@RequestHeader("username") String username) {
+
+
+    //     return null;
+    // }
+
+    @GetMapping(path="/api/client/dashboard", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> dashboard(@RequestHeader("username") String username) {
 
+        // appRepo.getUserSubscriptionDetails("jian_jun3@hotmail.com");
+        JsonObject body = databaseSvc.getUserSubscriptions(username);
         
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(body.toString());
     }
 }

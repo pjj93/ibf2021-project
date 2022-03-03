@@ -5,10 +5,17 @@ public class Subscription {
     private String username;
     private String email_notification;
     private String auto_trade;
+    private String tag;
     private String description;
-    
+
     public String getRule_id() {
         return rule_id;
+    }
+    public String getTag() {
+        return tag;
+    }
+    public void setTag(String tag) {
+        this.tag = tag;
     }
     public String getDescription() {
         return description;

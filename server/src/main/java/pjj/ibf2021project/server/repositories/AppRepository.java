@@ -1,10 +1,12 @@
 package pjj.ibf2021project.server.repositories;
 
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_BY_USERNAME_AND_PASSWORD;
+import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_SUBSCRIPTION_DETAILS;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_INSERT_NEW_USER;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,25 @@ public class AppRepository {
         return false;
     }
 
-    private List<Subscription> getSubscriptionDetails(String username) {
+    public List<Subscription> getUserSubscriptionDetails(String username) {
         List<Subscription> subscriptions = new ArrayList<>();
+        final SqlRowSet rs = template.queryForRowSet(SQL_GET_USER_SUBSCRIPTION_DETAILS, username);
+
+        while(rs.next()) {
+            Subscription subscription = new Subscription();
+            subscription.setUsername(rs.getString("username"));
+            subscription.setRule_id(rs.getString("rule_id"));
+            subscription.setTag(rs.getString("tag"));
+            subscription.setDescription(rs.getString("description"));
+            subscription.setEmail_notification(rs.getString("email_notification"));
+            subscription.setAuto_trade(rs.getString("auto_trade"));
+            
+            logger.log(Level.INFO, "number of subscriptions >>> " + subscription.getDescription());
+
+            subscriptions.add(subscription); // add into list
+        }
         
-        
+        logger.log(Level.INFO, "number of subscriptions >>> " + subscriptions.size());
 
         return subscriptions;
     }

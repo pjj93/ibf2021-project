@@ -16,15 +16,16 @@ insert into user (username, `password`, `role`) values ("shadowysupercoder69420@
 create table twitter(
     rule_id varchar(20),
     `value` varchar(256),
-    tag varchar(32),
+    tag varchar(20),
+    `description` varchar(20),
     primary key(rule_id)
 );
 
 insert into 
-    twitter(rule_id, `value`, `tag`) 
-	values  ("1497546470748135424", "testdoge -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "testdoge"),
-			("1497577128975470592", "world -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "world"),
-            ("1497848388800290822", "posttry -is:retweet -is:reply from:testuser69420", "post from server");
+    twitter(rule_id, `value`, `tag`, `description`) 
+	values  ("1497546470748135424", "testdoge -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "testdoge", "Test tweet for doge"),
+			("1497577128975470592", "world -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "world", "Hello World"),
+            ("1497848388800290822", "posttry -is:retweet -is:reply from:testuser69420", "post from server", "Post from server");
 
 create table subscription(
     username varchar(64) not null,

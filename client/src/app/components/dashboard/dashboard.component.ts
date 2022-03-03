@@ -1,5 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AppService } from 'src/app/app.service';
+import { Subscription } from 'src/app/models';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -8,11 +12,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  username: String = "";
-
-  constructor(private http: HttpClient) { }
+  username: string = "jian_jun3@hotmail.com";
+  getSubscription!: Observable<any>;
+  subscriptions: Subscription[] = [];
+  constructor(private http: HttpClient, private appSvc: AppService) { }
 
   ngOnInit(): void {
+    this.getSubscription = this.http.get("http://localhost:8080/api/client/dashboard",
+    { headers: new HttpHeaders({'username': this.username })})
+
+    this.getSubscription.subscribe(resp => {
+      this.subscriptions =  resp.subscriptions;
+      console.log(this.subscriptions)
+      console.log(this.subscriptions.length)
+    })
 
   }
 
