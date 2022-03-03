@@ -1,40 +1,39 @@
-<div class="container">
-  <h2>Login</h2>
-  <div class="row mt-3 ">
-    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
-      <div class="mt-4 row">
-        <h4><label for="username">Username</label></h4>
-        <div class="input-group">
-          <input type="email" name="email" class="form-control" placeholder="example@gmail.com" formControlName="username">
-        </div>
-        <small class="form-text text-danger" *ngIf="form.controls['username'].invalid && form.controls['username'].dirty && form.controls['username'].touched">Please enter a valid email</small>
+<div class="row d-flex justify-content-center mt-5">
+  <div class="col-6">
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+    <div class="mt-4 row">
+      <h5><label for="username">Username</label></h5>
+      <div class="input-group">
+        <input type="email" name="email" class="form-control" placeholder="example@gmail.com" formControlName="username">
       </div>
-      <div class="mt-4 row">
-        <h4><label for="password">Password</label></h4>
-        <div class="input-group">
-          <input
-              [type]="fieldTextType ? 'text' : 'password'"
-              name="password"
-              class="form-control"
-              placeholder="password"
-              formControlName="password"
-          >
-          <div class="input-group-append">
-            <span class="input-group-text">
-              <i class="bi bi-eye-slash" [ngClass]="{
-                'bi-eye-slash': !fieldTextType,
-                'bi-eye': fieldTextType
-              }"
-              (click)="toggleFieldTextType()"></i>
-            </span>
-         </div>
+      <small class="form-text text-danger" *ngIf="form.controls['username'].invalid && form.controls['username'].dirty && form.controls['username'].touched">Please enter a valid email</small>
+    </div>
+    <div class="mt-4 row">
+      <h5><label for="password">Password</label></h5>
+      <div class="input-group">
+        <input
+            [type]="fieldTextType ? 'text' : 'password'"
+            name="password"
+            class="form-control"
+            placeholder="password"
+            formControlName="password"
+        >
+        <div class="input-group-append">
+          <span class="input-group-text">
+            <i class="bi bi-eye-slash" [ngClass]="{
+              'bi-eye-slash': !fieldTextType,
+              'bi-eye': fieldTextType
+            }"
+            (click)="toggleFieldTextType()"></i>
+          </span>
         </div>
       </div>
-      <div class="row mt-5">
-        <div class="col">
-          <button class="btn btn-primary text-right" type="submit" [disabled]="form.invalid">Login</button>
-        </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col">
+        <button class="btn btn-primary text-right" type="submit" [disabled]="form.invalid">Login</button>
       </div>
-    </form>
+    </div>
+  </form>
   </div>
 </div>

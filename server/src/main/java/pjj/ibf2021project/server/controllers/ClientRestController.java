@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
@@ -80,5 +82,12 @@ public class ClientRestController {
                         .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
         }
+    }
+
+    @GetMapping(path="/dashboard")
+    public ResponseEntity<String> dashboard(@RequestHeader("username") String username) {
+
+        
+        return null;
     }
 }

@@ -3,12 +3,16 @@ package pjj.ibf2021project.server.repositories;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_BY_USERNAME_AND_PASSWORD;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_INSERT_NEW_USER;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+
+import pjj.ibf2021project.server.models.Subscription;
 
 @Repository
 public class AppRepository {
@@ -29,6 +33,13 @@ public class AppRepository {
         return false;
     }
 
+    private List<Subscription> getSubscriptionDetails(String username) {
+        List<Subscription> subscriptions = new ArrayList<>();
+        
+        
+
+        return subscriptions;
+    }
     // public boolean hasUser(String username) {
 	// 	final SqlRowSet rs = template.queryForRowSet(
 	// 			SQL_GET_USER_BY_USERNAME, username);
