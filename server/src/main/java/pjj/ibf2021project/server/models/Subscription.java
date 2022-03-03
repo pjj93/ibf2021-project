@@ -3,13 +3,25 @@ package pjj.ibf2021project.server.models;
 public class Subscription {
     private String rule_id;
     private String username;
-    private String email_notification;
-    private String auto_trade;
+    private boolean email_notification;
+    private boolean auto_trade;
     private String tag;
     private String description;
 
     public String getRule_id() {
         return rule_id;
+    }
+    public boolean hasAuto_trade() {
+        return auto_trade;
+    }
+    public void setAuto_trade(boolean auto_trade) {
+        this.auto_trade = auto_trade;
+    }
+    public boolean hasEmail_notification() {
+        return email_notification;
+    }
+    public void setEmail_notification(boolean email_notification) {
+        this.email_notification = email_notification;
     }
     public String getTag() {
         return tag;
@@ -22,18 +34,6 @@ public class Subscription {
     }
     public void setDescription(String description) {
         this.description = description;
-    }
-    public String getAuto_trade() {
-        return auto_trade;
-    }
-    public void setAuto_trade(String auto_trade) {
-        this.auto_trade = auto_trade;
-    }
-    public String getEmail_notification() {
-        return email_notification;
-    }
-    public void setEmail_notification(String email_notification) {
-        this.email_notification = email_notification;
     }
     public String getUsername() {
         return username;

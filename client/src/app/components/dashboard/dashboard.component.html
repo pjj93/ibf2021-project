@@ -1,40 +1,60 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col">
-      <h4 class="mt-5 mb-3">Active Subscriptions</h4>
-      <table class="table">
-        <thead class="table-dark">
-          <tr>
-            <!-- <th scope="col">#</th> -->
-            <th scope="col">Tag</th>
-            <th scope="col">Description</th>
-            <th scope="col">Email Notification</th>
-            <th scope="col">Auto Trade</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let subscription of subscriptions; index as i">
-            <!-- <th scope="row">{{i + 1}}</th> -->
-            <td>{{subscription?.tag | titlecase }}</td>
-            <td>{{subscription?.description | titlecase}}</td>
-            <td>{{subscription?.email_notification}}</td>
-            <td>{{subscription?.auto_trade}}</td>
-            <td>
-              <button
-              class="btn-sm btn-dark"
-              (click)="onItemButtonClick(subscription)"
-              [disabled]="editMode">
-              {{itemButtonText}}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div [hidden]="!editMode">
+    <div class="col-lg-12 md-12">
+      <div id="subscription" [hidden]="editMode">
+        <h4 class="mt-5 mb-3">Subscriptions</h4>
+        <table class="table table-hover" [hidden]="editMode">
+          <thead class="table-dark">
+            <tr>
+              <!-- <th scope="col">#</th> -->
+              <th scope="col">Tag</th>
+              <th scope="col">Description</th>
+              <th scope="col">Email Notification</th>
+              <th scope="col">Auto Trade</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subscription of subscriptions; index as i">
+              <!-- <th scope="row">{{i + 1}}</th> -->
+              <td>{{subscription?.tag | titlecase }}</td>
+              <td>{{subscription?.description | titlecase}}</td>
+              <td>
+                <div class="form-switch">
+                <input #toggleEmailNotification
+                    class="form-check-input"
+                    id="toggleEmailNotification"
+                    type="checkbox"
+                    [checked]="subscription?.email_notification"
+                    (change)="onEmailNotificationChange(subscription.rule_id, subscription.username, toggleEmailNotification.checked)">
+                </div>
+              </td>
+              <td>
+                <div class="form-switch">
+                  <input #toggleAutoTrade
+                      class="form-check-input"
+                      id="toggleEmailNotification"
+                      type="checkbox"
+                      [checked]="subscription?.auto_trade"
+                      (change)="onAutoTradeChange(subscription.rule_id, subscription.username, toggleAutoTrade.checked)">
+                  </div>
+              </td>
+              <td>
+                <button
+                class="btn-sm btn-dark"
+                (click)="onItemButtonClick(subscription)"
+                [disabled]="editMode">
+                {{itemButtonText}}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="editsubscription" [hidden]="!editMode">
         <h4 class="mt-5 mb-3">Edit Subscription</h4>
-        <table class="table" >
-          <thead class="table-secondary">
+        <table class="table table-hover" >
+          <thead class="table-dark">
             <tr>
               <th scope="col">Tag</th>
               <th scope="col">Description</th>
@@ -44,19 +64,17 @@
             </tr>
           </thead>
           <tbody>
+            <form></form>
             <tr>
               <td>{{selectedSubscription?.tag | titlecase}}</td>
               <td>{{selectedSubscription?.description | titlecase}}</td>
-              <td>{{selectedSubscription?.email_notification}}</td>
-              <td>{{selectedSubscription?.auto_trade}}</td>
               <td>
-                <button
-                class="btn-sm btn-dark"
-                (click)="onItemButtonSave()"
-                [disabled]="!editMode">
-                Save
-                </button>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked>
+                </div>
               </td>
+              <td></td>
+              <td></td>
             </tr>
           </tbody>
         </table>

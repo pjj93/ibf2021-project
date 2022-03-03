@@ -37,9 +37,22 @@ export class DashboardComponent implements OnInit {
     this.selectedSubscription = subscription;
   }
 
-  onItemButtonSave() {
+  onItemButtonSave(email_notfication: string, auto_trade: string) {
     this.editMode = false;
+    console.log(email_notfication)
+    console.log(auto_trade)
+  }
 
+  onEmailNotificationChange(rule_id: string, username: string, email_notification: boolean) {
+    console.log(rule_id)
+    console.log(username)
+    console.log(email_notification)
+  }
+
+  onAutoTradeChange(rule_id: string, username: string, email_notification: boolean) {
+    console.log(rule_id)
+    console.log(username)
+    console.log(email_notification)
   }
 
 }

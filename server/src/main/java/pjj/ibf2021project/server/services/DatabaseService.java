@@ -45,8 +45,8 @@ public class DatabaseService {
                                         .add("rule_id", subscription.getRule_id())
                                         .add("username", subscription.getUsername())
                                         .add("tag", subscription.getTag())
-                                        .add("email_notification", subscription.getEmail_notification())
-                                        .add("auto_trade", subscription.getAuto_trade())
+                                        .add("email_notification", subscription.hasEmail_notification())
+                                        .add("auto_trade", subscription.hasAuto_trade())
                                         .add("description", subscription.getDescription())
                                         .build();
             jsonArrBuilder.add(jsonSubObj);

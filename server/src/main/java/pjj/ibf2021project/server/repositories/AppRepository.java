@@ -45,8 +45,8 @@ public class AppRepository {
             subscription.setRule_id(rs.getString("rule_id"));
             subscription.setTag(rs.getString("tag"));
             subscription.setDescription(rs.getString("description"));
-            subscription.setEmail_notification(rs.getString("email_notification"));
-            subscription.setAuto_trade(rs.getString("auto_trade"));
+            subscription.setEmail_notification(rs.getBoolean("email_notification"));
+            subscription.setAuto_trade(rs.getBoolean("auto_trade"));
             
             logger.log(Level.INFO, "number of subscriptions >>> " + subscription.getDescription());
 

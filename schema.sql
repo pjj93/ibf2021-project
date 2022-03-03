@@ -30,8 +30,8 @@ insert into
 create table subscription(
     username varchar(64) not null,
     rule_id varchar(20) not null,
-    email_notification enum("yes", "no") default "yes" not null,
-    auto_trade enum("yes", "no") default "no" not null,
+    email_notification BOOLEAN default true,
+    auto_trade BOOLEAN default false,
     constraint fk_subscription_username
         foreign key(username)
         references user(username)
