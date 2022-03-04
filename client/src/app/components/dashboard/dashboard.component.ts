@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   isUpdated: boolean = false;
   emailSwitchClicked: boolean = false;
   tradeSwitchClicked: boolean = false;
+  ftxBtnClicked: boolean = false;
   hasServerResponse: boolean = false;
 
   constructor(private http: HttpClient, private appSvc: AppService, private fb: FormBuilder) { }
@@ -37,23 +38,32 @@ export class DashboardComponent implements OnInit {
       this.subscriptions =  resp.subscriptions;
     })
 
-    this.getFtx = this.http.get("http://localhost:8080/api/client/ftx",
+    this.getFtx = this.http.get<Ftx>("http://localhost:8080/api/client/ftx",
     { headers: new HttpHeaders({'username': this.username })})
+
+    this.form = this.fb.group({
+      api_key: this.fb.control({value: this.ftx?.api_key, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)]),
+      api_secret: this.fb.control({value: this.ftx?.api_secret, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)])
+    })
 
     this.getFtx.subscribe({
         next: (resp) => {
                           console.log(resp);
                           this.hasFtx = true;
+                          this.ftx = resp
+                          this.form.patchValue({
+                            api_key: this.ftx?.api_key,
+                            api_secret: this.ftx?.api_secret
+                          })
         },
         error: (e) => {
                         console.log(e)
         }
       })
 
-    this.form = this.fb.group({
-        api_key: this.fb.control({value: this.ftx?.api_key, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)]),
-        api_secret: this.fb.control({value: this.ftx?.api_secret, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)])
-      })
+  }
+
+  ngOnUpdate(): void {
 
   }
 
@@ -126,7 +136,9 @@ export class DashboardComponent implements OnInit {
   }
 
   onUpdate(formdata: Ftx) {
-
+    this.ftxBtnClicked = true;
+    console.log("form api_key >>> " + formdata.api_key)
+    console.log("model api_key >>> " + this.ftx?.api_key)
     if(this.form.controls['api_key'].disabled) {
       this.form.controls['api_key'].enable()
     } else {
@@ -138,6 +150,7 @@ export class DashboardComponent implements OnInit {
       this.form.controls['api_secret'].disable()
     }
     if((this.ftx?.api_key != formdata.api_key) || (this.ftx?.api_secret != formdata.api_secret)) {
+      console.log("in the if statement")
       this.http
         .post("http://localhost:8080/api/client/ftx",
                formdata,
@@ -146,9 +159,23 @@ export class DashboardComponent implements OnInit {
         .subscribe({
               next: (resp) => {
                               console.log(resp)
-                              this.ftx.api_key = formdata.api_key
-                              this.ftx.api_secret = formdata.api_secret
-                }
+                              this.ftx = formdata
+                              this.isUpdated = true;
+                              this.hasServerResponse = true;
+                              setTimeout(() => {
+                                this.isUpdated = false;
+                                this.hasServerResponse = false;
+                                this.emailSwitchClicked = false;
+                              }, 1000)
+              },
+              error: (e) => {
+                              console.log(e)
+                              this.hasServerResponse = true;
+                              setTimeout(() => {
+                                this.hasServerResponse = false;
+                                this.tradeSwitchClicked = false;
+                              }, 1000)
+              }
         })
     }
   }

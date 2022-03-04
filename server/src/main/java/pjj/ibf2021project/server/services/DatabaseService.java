@@ -96,4 +96,24 @@ public class DatabaseService {
             return false;
         }
     }
+
+    public boolean updateFtx(String api_key, String api_secret, String username) {
+        logger.log(Level.INFO, "update existing ftx");
+        try {
+            return appRepo.updateFtx(api_key, api_secret, username) > 0;
+        } catch (DataAccessException e) {
+            logger.log(Level.INFO, "error - unable to update auto_trade in subscription table");
+            return false;
+        }
+    }
+
+    public boolean insertFtx(String api_key, String api_secret, String username) {
+        logger.log(Level.INFO, "inserting new ftx");
+        try {
+            return appRepo.insertFtx(api_key, api_secret, username);
+        } catch (DataAccessException e) {
+            logger.log(Level.INFO, "error - unable to add new ftx key");
+            return false;
+        }
+    }
 }

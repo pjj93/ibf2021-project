@@ -62,13 +62,12 @@
                   <td><input type="text" name="api_key" formControlName="api_key" class="form-control"></td>
                   <td><input type="password" name="api_secret" formControlName="api_secret" class="form-control"></td>
                   <td>
-                    <button type="submit" class="btn btn-primary">Add / Update</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Add / Update</button>
                   </td>
               </tr>
             </tbody>
           </table>
         </form>
-        <button type="button" class="btn-sm btn-primary" *ngIf="!hasFtx">Add API Key</button>
       </div>
     </div>
   </div>
@@ -79,6 +78,8 @@
         <p *ngIf="!isUpdated && emailSwitchClicked && hasServerResponse" class="bg-warning">Email Update Failed!</p>
         <p *ngIf="isUpdated && tradeSwitchClicked && hasServerResponse" class="bg-success">Auto Trade Update Success!</p>
         <p *ngIf="!isUpdated && tradeSwitchClicked && hasServerResponse" class="bg-warning">Auto Trade Update Failed!</p>
+        <p *ngIf="isUpdated && ftxBtnClicked && hasServerResponse" class="bg-success">FTX API Key Updated!</p>
+        <p *ngIf="!isUpdated && ftxBtnClicked && hasServerResponse" class="bg-warning">FTX API Key Update Failed!</p>
       </div>
     </div>
   </div>

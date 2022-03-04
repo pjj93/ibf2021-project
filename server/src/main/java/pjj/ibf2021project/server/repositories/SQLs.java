@@ -27,4 +27,10 @@ public interface SQLs {
                                 "update subscription "+
                                 "set auto_trade = ? "+
                                 "where username = ? and rule_id = ?";
+    public static final String SQL_INSERT_FTX =
+                                "insert into ftx (api_key, api_secret, username) values (?, ?, ?)";
+    public static final String SQL_UPDATE_FTX =
+                                "update ftx "+
+                                "set api_key = ?, api_secret = ? "+
+                                "where username = ?";
 }

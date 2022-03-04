@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import pjj.ibf2021project.server.models.Ftx;
 import pjj.ibf2021project.server.repositories.AppRepository;
 import pjj.ibf2021project.server.services.DatabaseService;
 
@@ -111,9 +112,31 @@ public class ClientRestController {
     }
 
     @PostMapping(path="/api/client/ftx", consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateFtx(@RequestHeader("username") String username) {
+    public ResponseEntity<String> updateFtx(@RequestHeader("username") String username, @RequestBody Ftx ftx) {
 
-        return null;
+        String api_key = ftx.getApi_key();
+        String api_secret = ftx.getApi_secret();
+        boolean isUpdated = false;
+
+        JsonObject ftxObj = databaseSvc.getFtx(username);
+        if (ftxObj != null) {
+            isUpdated = databaseSvc.updateFtx(api_key, api_secret, username);
+        } else {
+            isUpdated = databaseSvc.insertFtx(api_key, api_secret, username);
+        }
+        
+        if(isUpdated) {
+            response = Json.createObjectBuilder()
+                        .add("status", "updated")
+                        .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+        } else {
+            response = Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("message", "unable to update")
+                        .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
+        }
     }
 
     @PostMapping(path="/api/client/subscription/email", consumes = MediaType.APPLICATION_JSON_VALUE)
