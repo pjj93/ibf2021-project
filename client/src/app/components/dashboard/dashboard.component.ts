@@ -165,7 +165,7 @@ export class DashboardComponent implements OnInit {
                               setTimeout(() => {
                                 this.isUpdated = false;
                                 this.hasServerResponse = false;
-                                this.emailSwitchClicked = false;
+                                this.ftxBtnClicked = false;
                               }, 1000)
               },
               error: (e) => {
@@ -173,7 +173,7 @@ export class DashboardComponent implements OnInit {
                               this.hasServerResponse = true;
                               setTimeout(() => {
                                 this.hasServerResponse = false;
-                                this.tradeSwitchClicked = false;
+                                this.ftxBtnClicked = false;
                               }, 1000)
               }
         })
