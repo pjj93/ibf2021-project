@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-12 md-12">
-      <div id="subscription" [hidden]="editMode">
+      <div id="subscription">
         <h4 class="mt-5 mb-3">Subscriptions</h4>
-        <table class="table table-hover" [hidden]="editMode">
+        <table class="table table-hover">
           <thead class="table-dark">
             <tr>
               <!-- <th scope="col">#</th> -->
@@ -11,7 +11,6 @@
               <th scope="col">Description</th>
               <th scope="col">Email Notification</th>
               <th scope="col">Auto Trade</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -39,45 +38,15 @@
                       (change)="onAutoTradeChange(subscription.rule_id, subscription.username, toggleAutoTrade.checked)">
                   </div>
               </td>
-              <td>
-                <button
-                class="btn-sm btn-dark"
-                (click)="onItemButtonClick(subscription)"
-                [disabled]="editMode">
-                {{itemButtonText}}
-                </button>
-              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div id="editsubscription" [hidden]="!editMode">
-        <h4 class="mt-5 mb-3">Edit Subscription</h4>
-        <table class="table table-hover" >
-          <thead class="table-dark">
-            <tr>
-              <th scope="col">Tag</th>
-              <th scope="col">Description</th>
-              <th scope="col">Email Notification</th>
-              <th scope="col">Auto Trade</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <form></form>
-            <tr>
-              <td>{{selectedSubscription?.tag | titlecase}}</td>
-              <td>{{selectedSubscription?.description | titlecase}}</td>
-              <td>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked>
-                </div>
-              </td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="serverresponse">
+        <p *ngIf="isUpdated && emailSwitchClicked && hasServerResponse" class="bg-success">Email Update Success!</p>
+        <p *ngIf="!isUpdated && emailSwitchClicked && hasServerResponse" class="bg-warning">Email Update Failed!</p>
+        <p *ngIf="isUpdated && tradeSwitchClicked && hasServerResponse" class="bg-success">Auto Trade Update Success!</p>
+        <p *ngIf="!isUpdated && tradeSwitchClicked && hasServerResponse" class="bg-warning">Auto Trade Update Failed!</p>
       </div>
     </div>
   </div>

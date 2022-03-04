@@ -84,13 +84,6 @@ public class ClientRestController {
         }
     }
 
-    // @GetMapping(path="/dashboard")
-    // public ResponseEntity<String> dashboard(@RequestHeader("username") String username) {
-
-
-    //     return null;
-    // }
-
     @GetMapping(path="/api/client/dashboard", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> dashboard(@RequestHeader("username") String username) {
 
@@ -98,5 +91,57 @@ public class ClientRestController {
         JsonObject body = databaseSvc.getUserSubscriptions(username);
         
         return ResponseEntity.status(HttpStatus.OK).body(body.toString());
+    }
+
+    @PostMapping(path="/api/client/subscription/email", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateEmailNotification(@RequestBody String json) {
+
+        JsonReader reader = Json.createReader(new ByteArrayInputStream(json.getBytes()));
+        JsonObject jsonObj = reader.readObject();
+
+        boolean email_notification = jsonObj.getBoolean("email_notification");
+        String username = jsonObj.getString("username");
+        String rule_id = jsonObj.getString("rule_id");
+
+        boolean isUpdated = databaseSvc.updateSubEmailNotification(rule_id, username, email_notification);
+        
+        if(isUpdated) {
+            response = Json.createObjectBuilder()
+                        .add("status", "updated")
+                        .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+        } else {
+            response = Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("message", "unable to update")
+                        .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
+        }
+    }
+
+    @PostMapping(path="/api/client/subscription/trade", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateAutoTrade(@RequestBody String json) {
+
+        JsonReader reader = Json.createReader(new ByteArrayInputStream(json.getBytes()));
+        JsonObject jsonObj = reader.readObject();
+
+        boolean auto_trade = jsonObj.getBoolean("auto_trade");
+        String username = jsonObj.getString("username");
+        String rule_id = jsonObj.getString("rule_id");
+
+        boolean isUpdated = databaseSvc.updateSubAutoTrade(rule_id, username, auto_trade);
+        
+        if(isUpdated) {
+            response = Json.createObjectBuilder()
+                        .add("status", "updated")
+                        .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+        } else {
+            response = Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("message", "unable to update")
+                        .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
+        }
     }
 }

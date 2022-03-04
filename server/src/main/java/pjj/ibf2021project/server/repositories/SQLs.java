@@ -15,8 +15,12 @@ public interface SQLs {
                                 "where subscription.username = ?";
     public static final String SQL_INSERT_USER_SUBSCRIPTION =
                                 "insert into subscription (username, rule_id) values (?, ?)";
-    public static final String SQL_UPDATE_USER_SUBSCRIPTION = 
+    public static final String SQL_UPDATE_USER_SUBSCRIPTION_EMAIL = 
                                 "update subscription "+
-                                "set email_notification = ?, auto_trade = ?"+
+                                "set email_notification = ? "+
+                                "where username = ? and rule_id = ?";
+    public static final String SQL_UPDATE_USER_SUBSCRIPTION_AUTOTRADE = 
+                                "update subscription "+
+                                "set auto_trade = ? "+
                                 "where username = ? and rule_id = ?";
 }

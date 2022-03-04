@@ -13,11 +13,15 @@ import { Subscription } from 'src/app/models';
 export class DashboardComponent implements OnInit {
 
   itemButtonText: string = "Edit";
-  editMode: boolean = false;
   username: string = "jian_jun3@hotmail.com";
   getSubscription!: Observable<any>;
   selectedSubscription!: Subscription;
   subscriptions: Subscription[] = [];
+  isUpdated: boolean = false;
+  emailSwitchClicked: boolean = false;
+  tradeSwitchClicked: boolean = false;
+  hasServerResponse: boolean = false;
+
   constructor(private http: HttpClient, private appSvc: AppService) { }
 
   ngOnInit(): void {
@@ -26,33 +30,79 @@ export class DashboardComponent implements OnInit {
 
     this.getSubscription.subscribe(resp => {
       this.subscriptions =  resp.subscriptions;
-      console.log(this.subscriptions)
-      console.log(this.subscriptions.length)
     })
 
+    console.log("isEmailUpdated: " + this.isUpdated)
+    console.log("emailSwitchedClicked: " + this.emailSwitchClicked)
+    console.log("hasServerRespnose: " + this.hasServerResponse)
   }
 
-  onItemButtonClick(subscription: Subscription) {
-    this.editMode = true;
-    this.selectedSubscription = subscription;
+  onEmailNotificationChange(value_rule_id: string, value_username: string, value_email_notification: boolean) {
+    this.emailSwitchClicked = true;
+    let payload = {
+      rule_id: value_rule_id,
+      username: value_username,
+      email_notification: value_email_notification
+    };
+
+    this.http.post(
+              "http://localhost:8080/api/client/subscription/email",
+              payload)
+              .subscribe({
+                next: (resp) => {
+                                  console.log(resp)
+                                  this.isUpdated = true;
+                                  this.hasServerResponse = true;
+                                  setTimeout(() => {
+                                    this.isUpdated = false;
+                                    this.hasServerResponse = false;
+                                    this.emailSwitchClicked = false;
+                                  }, 1000)
+                },
+                error: (e) => {
+                                  console.log(e)
+                                  this.hasServerResponse = true;
+                                  setTimeout(() => {
+                                    this.hasServerResponse = false;
+                                    this.emailSwitchClicked = false;
+                                  }, 1000)
+                }
+
+              })
   }
 
-  onItemButtonSave(email_notfication: string, auto_trade: string) {
-    this.editMode = false;
-    console.log(email_notfication)
-    console.log(auto_trade)
-  }
+  onAutoTradeChange(value_rule_id: string, value_username: string, value_auto_trade: boolean) {
+    this.tradeSwitchClicked = true;
+    let payload = {
+      rule_id: value_rule_id,
+      username: value_username,
+      auto_trade: value_auto_trade
+    };
 
-  onEmailNotificationChange(rule_id: string, username: string, email_notification: boolean) {
-    console.log(rule_id)
-    console.log(username)
-    console.log(email_notification)
-  }
+    this.http.post(
+              "http://localhost:8080/api/client/subscription/trade",
+              payload)
+              .subscribe({
+                next: (resp) => {
+                                  console.log(resp)
+                                  this.isUpdated = true;
+                                  this.hasServerResponse = true;
+                                  setTimeout(() => {
+                                    this.isUpdated = false;
+                                    this.hasServerResponse = false;
+                                    this.tradeSwitchClicked = false;
+                                  }, 1000)
+                },
+                error: (e) => {
+                                  console.log(e)
+                                  this.hasServerResponse = true;
+                                  setTimeout(() => {
+                                    this.hasServerResponse = false;
+                                    this.tradeSwitchClicked = false;
+                                  }, 1000)
+                }
 
-  onAutoTradeChange(rule_id: string, username: string, email_notification: boolean) {
-    console.log(rule_id)
-    console.log(username)
-    console.log(email_notification)
+              })
   }
 
 }

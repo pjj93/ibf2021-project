@@ -3,6 +3,8 @@ package pjj.ibf2021project.server.repositories;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_BY_USERNAME_AND_PASSWORD;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_SUBSCRIPTION_DETAILS;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_INSERT_NEW_USER;
+import static pjj.ibf2021project.server.repositories.SQLs.SQL_UPDATE_USER_SUBSCRIPTION_AUTOTRADE;
+import static pjj.ibf2021project.server.repositories.SQLs.SQL_UPDATE_USER_SUBSCRIPTION_EMAIL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +59,16 @@ public class AppRepository {
 
         return subscriptions;
     }
-    // public boolean hasUser(String username) {
-	// 	final SqlRowSet rs = template.queryForRowSet(
-	// 			SQL_GET_USER_BY_USERNAME, username);
-	// 	if (rs.next())
-	// 		return rs.getInt("user_count") > 0;
-	// 	return false;
-	// }
+
+    public int updateSubEmailNotification(String rule_id, String username, boolean email_notification) {
+
+        return template.update(SQL_UPDATE_USER_SUBSCRIPTION_EMAIL, email_notification, username, rule_id);
+        
+    }
+
+    public int updateSubAutoTrade(String rule_id, String username, boolean auto_trade) {
+
+        return template.update(SQL_UPDATE_USER_SUBSCRIPTION_AUTOTRADE, auto_trade, username, rule_id);
+        
+    }
 }

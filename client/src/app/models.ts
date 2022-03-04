@@ -6,3 +6,8 @@ export interface Subscription {
   auto_trade: boolean,
   description: string
 }
+
+export interface Ftx {
+  api_key: string,
+  api_secret: string
+}

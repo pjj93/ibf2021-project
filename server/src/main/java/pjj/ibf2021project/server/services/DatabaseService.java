@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,25 @@ public class DatabaseService {
                                     .build();
 
         return jsonSubscriptions;
+    }
+
+    public boolean updateSubEmailNotification(String rule_id, String username, boolean email_notification) {
+
+        try {
+            return appRepo.updateSubEmailNotification(rule_id, username, email_notification) > 0;
+        } catch (DataAccessException e) {
+            logger.log(Level.INFO, "error - unable to update email_notification in subscription table");
+            return false;
+        }
+    }
+
+    public boolean updateSubAutoTrade(String rule_id, String username, boolean auto_trade) {
+
+        try {
+            return appRepo.updateSubAutoTrade(rule_id, username, auto_trade) > 0;
+        } catch (DataAccessException e) {
+            logger.log(Level.INFO, "error - unable to update auto_trade in subscription table");
+            return false;
+        }
     }
 }
