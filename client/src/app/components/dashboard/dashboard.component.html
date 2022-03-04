@@ -42,7 +42,39 @@
           </tbody>
         </table>
       </div>
-      <div class="serverresponse">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 md-12">
+      <div id="ftx">
+        <h4 class="mt-5 mb-3">FTX API Key</h4>
+        <form [formGroup]="form" (ngSubmit)="onUpdate(form.value)">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">API Key</th>
+                <th scope="col">Secret</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  <td><input type="text" name="api_key" formControlName="api_key" class="form-control"></td>
+                  <td><input type="password" name="api_secret" formControlName="api_secret" class="form-control"></td>
+                  <td>
+                    <button type="submit" class="btn btn-primary">Add / Update</button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        <button type="button" class="btn-sm btn-primary" *ngIf="!hasFtx">Add API Key</button>
+      </div>
+    </div>
+  </div>
+  <div class="serverresponse">
+    <div class="row mt-4">
+      <div class="col">
         <p *ngIf="isUpdated && emailSwitchClicked && hasServerResponse" class="bg-success">Email Update Success!</p>
         <p *ngIf="!isUpdated && emailSwitchClicked && hasServerResponse" class="bg-warning">Email Update Failed!</p>
         <p *ngIf="isUpdated && tradeSwitchClicked && hasServerResponse" class="bg-success">Auto Trade Update Success!</p>

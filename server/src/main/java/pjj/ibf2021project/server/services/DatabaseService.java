@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import pjj.ibf2021project.server.models.Ftx;
 import pjj.ibf2021project.server.models.Subscription;
 import pjj.ibf2021project.server.repositories.AppRepository;
 
@@ -58,6 +59,22 @@ public class DatabaseService {
                                     .build();
 
         return jsonSubscriptions;
+    }
+
+    public JsonObject getFtx(String username) {
+
+        try {
+            Ftx ftx = appRepo.getFtx(username);
+            JsonObject jsonObj = Json.createObjectBuilder()
+                                    .add("api_key", ftx.getApi_key())
+                                    .add("api_secret", ftx.getApi_secret())
+                                    .build();
+            return jsonObj;
+        } catch (NullPointerException e) {
+            logger.log(Level.INFO, "error - no ftx key found for user");
+            return null;
+        }
+        
     }
 
     public boolean updateSubEmailNotification(String rule_id, String username, boolean email_notification) {

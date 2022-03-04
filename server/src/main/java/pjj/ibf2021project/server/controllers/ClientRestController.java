@@ -93,6 +93,29 @@ public class ClientRestController {
         return ResponseEntity.status(HttpStatus.OK).body(body.toString());
     }
 
+    @GetMapping(path="/api/client/ftx", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getFtx(@RequestHeader("username") String username) {
+
+        JsonObject body = databaseSvc.getFtx(username);
+        
+        if (body != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(body.toString());
+        } else {
+            response = Json.createObjectBuilder()
+                .add("status", "error")
+                .add("message", "no ftx key found for user")
+                .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
+        }
+
+    }
+
+    @PostMapping(path="/api/client/ftx", consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateFtx(@RequestHeader("username") String username) {
+
+        return null;
+    }
+
     @PostMapping(path="/api/client/subscription/email", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateEmailNotification(@RequestBody String json) {
 

@@ -1,6 +1,7 @@
 package pjj.ibf2021project.server.repositories;
 
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_BY_USERNAME_AND_PASSWORD;
+import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_FTX;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_SUBSCRIPTION_DETAILS;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_INSERT_NEW_USER;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_UPDATE_USER_SUBSCRIPTION_AUTOTRADE;
@@ -16,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
+import pjj.ibf2021project.server.models.Ftx;
 import pjj.ibf2021project.server.models.Subscription;
 
 @Repository
@@ -58,6 +60,21 @@ public class AppRepository {
         logger.log(Level.INFO, "number of subscriptions >>> " + subscriptions.size());
 
         return subscriptions;
+    }
+
+    public Ftx getFtx(String username) {
+        Ftx ftx = new Ftx();
+
+        final SqlRowSet rs = template.queryForRowSet(SQL_GET_USER_FTX, username);
+
+        if(rs.next()) {
+            ftx.setApi_key(rs.getString("api_key"));
+            ftx.setApi_secret(rs.getString("api_secret"));
+        } else {
+            return null;
+        }
+
+        return ftx;
     }
 
     public int updateSubEmailNotification(String rule_id, String username, boolean email_notification) {

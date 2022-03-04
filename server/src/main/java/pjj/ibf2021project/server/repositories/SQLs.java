@@ -13,6 +13,10 @@ public interface SQLs {
                                 "from subscription join twitter "+
                                 "on subscription.rule_id = twitter.rule_id "+
                                 "where subscription.username = ?";
+    public static final String SQL_GET_USER_FTX =
+                                "select api_key, api_secret "+
+                                "from ftx "+
+                                "where username = ?";
     public static final String SQL_INSERT_USER_SUBSCRIPTION =
                                 "insert into subscription (username, rule_id) values (?, ?)";
     public static final String SQL_UPDATE_USER_SUBSCRIPTION_EMAIL = 

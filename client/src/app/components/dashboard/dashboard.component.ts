@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AppService } from 'src/app/app.service';
-import { Subscription } from 'src/app/models';
+import { Ftx, Subscription } from 'src/app/models';
 
 
 @Component({
@@ -12,17 +13,21 @@ import { Subscription } from 'src/app/models';
 })
 export class DashboardComponent implements OnInit {
 
+  form!: FormGroup
   itemButtonText: string = "Edit";
   username: string = "jian_jun3@hotmail.com";
   getSubscription!: Observable<any>;
+  getFtx!: Observable<any>;
   selectedSubscription!: Subscription;
   subscriptions: Subscription[] = [];
+  ftx!: Ftx;
+  hasFtx: boolean = false;
   isUpdated: boolean = false;
   emailSwitchClicked: boolean = false;
   tradeSwitchClicked: boolean = false;
   hasServerResponse: boolean = false;
 
-  constructor(private http: HttpClient, private appSvc: AppService) { }
+  constructor(private http: HttpClient, private appSvc: AppService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getSubscription = this.http.get("http://localhost:8080/api/client/dashboard",
@@ -32,9 +37,24 @@ export class DashboardComponent implements OnInit {
       this.subscriptions =  resp.subscriptions;
     })
 
-    console.log("isEmailUpdated: " + this.isUpdated)
-    console.log("emailSwitchedClicked: " + this.emailSwitchClicked)
-    console.log("hasServerRespnose: " + this.hasServerResponse)
+    this.getFtx = this.http.get("http://localhost:8080/api/client/ftx",
+    { headers: new HttpHeaders({'username': this.username })})
+
+    this.getFtx.subscribe({
+        next: (resp) => {
+                          console.log(resp);
+                          this.hasFtx = true;
+        },
+        error: (e) => {
+                        console.log(e)
+        }
+      })
+
+    this.form = this.fb.group({
+        api_key: this.fb.control({value: this.ftx?.api_key, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)]),
+        api_secret: this.fb.control({value: this.ftx?.api_secret, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)])
+      })
+
   }
 
   onEmailNotificationChange(value_rule_id: string, value_username: string, value_email_notification: boolean) {
@@ -105,4 +125,31 @@ export class DashboardComponent implements OnInit {
               })
   }
 
+  onUpdate(formdata: Ftx) {
+
+    if(this.form.controls['api_key'].disabled) {
+      this.form.controls['api_key'].enable()
+    } else {
+      this.form.controls['api_key'].disable()
+    }
+    if(this.form.controls['api_secret'].disabled) {
+      this.form.controls['api_secret'].enable()
+    } else {
+      this.form.controls['api_secret'].disable()
+    }
+    if((this.ftx?.api_key != formdata.api_key) || (this.ftx?.api_secret != formdata.api_secret)) {
+      this.http
+        .post("http://localhost:8080/api/client/ftx",
+               formdata,
+               { headers: new HttpHeaders({'username': this.username }) }
+              )
+        .subscribe({
+              next: (resp) => {
+                              console.log(resp)
+                              this.ftx.api_key = formdata.api_key
+                              this.ftx.api_secret = formdata.api_secret
+                }
+        })
+    }
+  }
 }
