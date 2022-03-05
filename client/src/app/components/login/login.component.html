@@ -29,9 +29,12 @@
         </div>
       </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-4">
+      <span>Not registered? Signup <a [routerLink]="['/signup']">here</a></span>
+    </div>
+    <div class="row mt-4">
       <div class="col">
-        <button class="btn btn-primary text-right" type="submit" [disabled]="form.invalid">Login</button>
+        <button class="btn btn-dark text-right" type="submit" [disabled]="form.invalid">Login</button>
       </div>
     </div>
   </form>
