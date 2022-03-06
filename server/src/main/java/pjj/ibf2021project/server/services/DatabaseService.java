@@ -33,6 +33,19 @@ public class DatabaseService {
         }
     }
 
+    public boolean addNewUserSubscriptions(String username) {
+        try {
+            appRepo.insertSubscription(username, "1500344672710840323"); // test tweet
+            appRepo.insertSubscription(username, "1500360168625692676"); // test coinbase listing
+            appRepo.insertSubscription(username, "1500351541449953280"); // real coinbase listing
+            appRepo.insertSubscription(username, "1500352439492300804"); // real elon tweets doge
+            return true;
+        } catch (DuplicateKeyException e){
+            logger.log(Level.INFO, "error - username is registered");
+            return false;
+        }
+    }
+
     public boolean loginUser(String username, String password) {
         return appRepo.hasUser(username, password);
     }

@@ -11,3 +11,9 @@ export interface Ftx {
   api_key: string,
   api_secret: string
 }
+
+export interface User {
+  username: string,
+  password: string,
+  role: string
+}

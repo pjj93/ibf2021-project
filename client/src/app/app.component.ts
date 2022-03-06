@@ -7,9 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  isLogin: boolean = false;
-
-  onLogin() {
-    this.isLogin = true;
-  }
 }

@@ -5,6 +5,7 @@ import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_FTX;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_SUBSCRIPTION_DETAILS;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_INSERT_FTX;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_INSERT_NEW_USER;
+import static pjj.ibf2021project.server.repositories.SQLs.SQL_INSERT_USER_SUBSCRIPTION;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_UPDATE_FTX;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_UPDATE_USER_SUBSCRIPTION_AUTOTRADE;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_UPDATE_USER_SUBSCRIPTION_EMAIL;
@@ -32,6 +33,10 @@ public class AppRepository {
 
     public boolean insertUser(String username, String password) {
         return template.update(SQL_INSERT_NEW_USER, username, password) > 0;
+    }
+
+    public boolean insertSubscription(String username, String rule_id) {
+        return template.update(SQL_INSERT_USER_SUBSCRIPTION, username, rule_id) > 0;
     }
 
     public boolean hasUser(String username, String password) {

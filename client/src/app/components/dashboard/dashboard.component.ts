@@ -1,9 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AppService } from 'src/app/app.service';
 import { Ftx, Subscription } from 'src/app/models';
+import { SessionService } from 'src/app/session.service';
 
 
 @Component({
@@ -13,9 +15,9 @@ import { Ftx, Subscription } from 'src/app/models';
 })
 export class DashboardComponent implements OnInit {
 
+  isLogin: boolean = false;
   form!: FormGroup
-  itemButtonText: string = "Edit";
-  username: string = "jian_jun3@hotmail.com";
+  username: string = "";
   getSubscription!: Observable<any>;
   getFtx!: Observable<any>;
   selectedSubscription!: Subscription;
@@ -28,23 +30,31 @@ export class DashboardComponent implements OnInit {
   ftxBtnClicked: boolean = false;
   hasServerResponse: boolean = false;
 
-  constructor(private http: HttpClient, private appSvc: AppService, private fb: FormBuilder) { }
+  constructor(private http: HttpClient, private appSvc: AppService, private fb: FormBuilder, private router: Router, private sessionSvc: SessionService) { }
 
   ngOnInit(): void {
-    this.getSubscription = this.http.get("http://localhost:8080/api/client/dashboard",
-    { headers: new HttpHeaders({'username': this.username })})
+    this.form = this.fb.group({
+      api_key: this.fb.control({value: this.ftx?.api_key, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)]),
+      api_secret: this.fb.control({value: this.ftx?.api_secret, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)])
+    })
+
+    if(this.sessionSvc.getUsername() === null) {
+      this.router.navigate(['/login']);
+    } else {
+
+    this.username = this.sessionSvc.getUsername() || "";
+
+    this.getSubscription = this.http.get("/api/client/dashboard",
+    { headers: new HttpHeaders({ 'username': this.username })})
 
     this.getSubscription.subscribe(resp => {
       this.subscriptions =  resp.subscriptions;
     })
 
-    this.getFtx = this.http.get<Ftx>("http://localhost:8080/api/client/ftx",
+    this.getFtx = this.http.get<Ftx>("/api/client/ftx",
     { headers: new HttpHeaders({'username': this.username })})
 
-    this.form = this.fb.group({
-      api_key: this.fb.control({value: this.ftx?.api_key, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)]),
-      api_secret: this.fb.control({value: this.ftx?.api_secret, disabled: true}, [Validators.minLength(40), Validators.maxLength(40)])
-    })
+
 
     this.getFtx.subscribe({
         next: (resp) => {
@@ -61,6 +71,7 @@ export class DashboardComponent implements OnInit {
         }
       })
 
+    }
   }
 
   ngOnUpdate(): void {
@@ -76,7 +87,7 @@ export class DashboardComponent implements OnInit {
     };
 
     this.http.post(
-              "http://localhost:8080/api/client/subscription/email",
+              "/api/client/subscription/email",
               payload)
               .subscribe({
                 next: (resp) => {
@@ -87,7 +98,7 @@ export class DashboardComponent implements OnInit {
                                     this.isUpdated = false;
                                     this.hasServerResponse = false;
                                     this.emailSwitchClicked = false;
-                                  }, 1000)
+                                  }, 2000)
                 },
                 error: (e) => {
                                   console.log(e)
@@ -95,7 +106,7 @@ export class DashboardComponent implements OnInit {
                                   setTimeout(() => {
                                     this.hasServerResponse = false;
                                     this.emailSwitchClicked = false;
-                                  }, 1000)
+                                  }, 2000)
                 }
 
               })
@@ -110,7 +121,7 @@ export class DashboardComponent implements OnInit {
     };
 
     this.http.post(
-              "http://localhost:8080/api/client/subscription/trade",
+              "/api/client/subscription/trade",
               payload)
               .subscribe({
                 next: (resp) => {
@@ -121,7 +132,7 @@ export class DashboardComponent implements OnInit {
                                     this.isUpdated = false;
                                     this.hasServerResponse = false;
                                     this.tradeSwitchClicked = false;
-                                  }, 1000)
+                                  }, 2000)
                 },
                 error: (e) => {
                                   console.log(e)
@@ -129,7 +140,7 @@ export class DashboardComponent implements OnInit {
                                   setTimeout(() => {
                                     this.hasServerResponse = false;
                                     this.tradeSwitchClicked = false;
-                                  }, 1000)
+                                  }, 2000)
                 }
 
               })
@@ -152,7 +163,7 @@ export class DashboardComponent implements OnInit {
     if((this.ftx?.api_key != formdata.api_key) || (this.ftx?.api_secret != formdata.api_secret)) {
       console.log("in the if statement")
       this.http
-        .post("http://localhost:8080/api/client/ftx",
+        .post("/api/client/ftx",
                formdata,
                { headers: new HttpHeaders({'username': this.username }) }
               )
@@ -166,7 +177,7 @@ export class DashboardComponent implements OnInit {
                                 this.isUpdated = false;
                                 this.hasServerResponse = false;
                                 this.ftxBtnClicked = false;
-                              }, 1000)
+                              }, 2000)
               },
               error: (e) => {
                               console.log(e)
@@ -174,7 +185,7 @@ export class DashboardComponent implements OnInit {
                               setTimeout(() => {
                                 this.hasServerResponse = false;
                                 this.ftxBtnClicked = false;
-                              }, 1000)
+                              }, 2000)
               }
         })
     }

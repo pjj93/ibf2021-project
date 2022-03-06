@@ -6,8 +6,8 @@ use app;
 
 create table user(
     username varchar(64),
-    `password` varchar(20),
-    `role` varchar(8) default "user",
+    `password` varchar(20) not null,
+    `role` varchar(16) not null default "user",
     primary key(username)
 );
 
@@ -22,10 +22,11 @@ create table twitter(
 );
 
 insert into 
-    twitter(rule_id, `value`, `tag`, `description`) 
-	values  ("1497546470748135424", "testdoge -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "testdoge", "Test tweet for doge"),
-			("1497577128975470592", "world -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "world", "Hello World"),
-            ("1497848388800290822", "posttry -is:retweet -is:reply from:testuser69420", "post from server", "Post from server");
+twitter (rule_id, `value`, tag, `description`)
+values ("1500344672710840323", "test tweet -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "test", "test tweet"),
+		("1500360168625692676", "transfers available -is:retweet -is:reply (from:peajayjay OR from:testuser69420)", "test coinbase", "test coinbase listing"),
+        ("1500351541449953280", "transfers available -is:retweet -is:reply from:CoinbaseAssets", "coinbase listing", "coinbase listing"),
+        ("1500352439492300804", "doge -is:retweet -is:reply from:elonmusk", "elon doge", "elon tweets doge");
 
 create table subscription(
     username varchar(64) not null,

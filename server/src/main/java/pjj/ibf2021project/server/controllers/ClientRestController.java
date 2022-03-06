@@ -47,9 +47,18 @@ public class ClientRestController {
         boolean isAdded = databaseSvc.addNewUser(username, password);
 
         if(isAdded) {
-            response = Json.createObjectBuilder()
-                        .add("status", "created")
-                        .build();
+            boolean addedNewSubscriptions = databaseSvc.addNewUserSubscriptions(username);
+            if(addedNewSubscriptions) {
+                response = Json.createObjectBuilder()
+                                .add("status", "created")
+                                .add("message", "created user with subscriptions")
+                                .build();
+            } else {
+                response = Json.createObjectBuilder()
+                                .add("status", "created")
+                                .add("message", "created user without subscriptions")
+                                .build();
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(response.toString());
         } else {
             response = Json.createObjectBuilder()
