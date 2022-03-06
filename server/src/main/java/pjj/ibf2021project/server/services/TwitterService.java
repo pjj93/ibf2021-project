@@ -2,9 +2,12 @@ package pjj.ibf2021project.server.services;
 
 import static pjj.ibf2021project.server.Constants.ENV_TWITTER_BEARER_TOKEN;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import pjj.ibf2021project.server.models.Tweet;
+import pjj.ibf2021project.server.repositories.AppRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -23,6 +29,9 @@ public class TwitterService {
     
     @Autowired
     private EmailService emailSvc;
+
+    @Autowired
+    private AppRepository appRepo;
 
     private final WebClient webclient;
 
@@ -87,8 +96,9 @@ public class TwitterService {
         response.subscribe(resp -> {
             if(resp.contains("matching_rules")) {
                 logger.log(Level.INFO, resp);
+                Tweet tweet = parsePayload(resp);
                 try { 
-                    emailSvc.sendEmail(resp); 
+                    emailSvc.sendEmail(tweet, appRepo.getUsersSubscriptionByRuleId(tweet.getRule_id())); 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -139,5 +149,32 @@ public class TwitterService {
                 .retrieve()
                 .toEntity(String.class)
                 .block(); */
+    }
+
+    public Tweet parsePayload(String payload) {
+        Tweet tweet = new Tweet();
+        try (InputStream is = new ByteArrayInputStream(payload.getBytes())) {
+            final JsonReader reader = Json.createReader(is);
+            final JsonObject body = reader.readObject();
+
+            final JsonObject data = body.getJsonObject("data");
+            final JsonObject user = body.getJsonObject("includes").getJsonArray("users").getJsonObject(0);
+            final JsonObject matching_rule = body.getJsonArray("matching_rules").getJsonObject(0);
+
+            tweet.setText(data.getString("text"));
+            tweet.setUsername("@" + user.getString("username"));
+            tweet.setRule_id(matching_rule.getString("id"));
+            tweet.setTag(WordUtils.capitalize(matching_rule.getString("tag")));
+
+            logger.log(Level.INFO, "text >>> " + tweet.getText());
+            logger.log(Level.INFO, "username >>> " + tweet.getUsername());
+            logger.log(Level.INFO, "rule_id >>> " + tweet.getRule_id());
+            logger.log(Level.INFO, "tag >>> " + tweet.getTag());
+
+            return tweet;
+            
+        } catch (Exception ex) { }
+
+        return null;
     }
 }

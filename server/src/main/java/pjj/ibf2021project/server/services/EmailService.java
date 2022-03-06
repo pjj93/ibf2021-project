@@ -1,12 +1,14 @@
 package pjj.ibf2021project.server.services;
 
-import java.util.logging.Level;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import pjj.ibf2021project.server.models.Tweet;
 
 @Service
 public class EmailService{
@@ -16,17 +18,18 @@ public class EmailService{
 
     private Logger logger = Logger.getLogger(EmailService.class.getName());
     
-    public void sendEmail(String resp) {
+    public void sendEmail(Tweet tweet, List<String> listEmailTo) {
 
+        String[] emailTos = listEmailTo.toArray(String[]::new);
         String emailFrom = "shadowysupercoder69420@gmail.com";
-        String emailTo = "jian_jun3@hotmail.com";
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailFrom);
-        message.setTo(emailTo);
-        message.setSubject("Crypto Twitter Notification");
-        message.setText(resp);
+        message.setBcc(emailTos);
+
+        
+        message.setSubject("Coin Twitter Notification: " + tweet.getTag());
+        message.setText(tweet.getUsername() + " tweeted:\n\n" + tweet.getText());
         emailSender.send(message);
-        logger.log(Level.INFO, "Sent email from " + emailFrom + " to " + emailTo);
     }
 }

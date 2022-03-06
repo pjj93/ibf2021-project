@@ -1,5 +1,6 @@
 package pjj.ibf2021project.server.repositories;
 
+import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USERS_BY_SUBSCRIPTION_RULE_ID;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_BY_USERNAME_AND_PASSWORD;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_FTX;
 import static pjj.ibf2021project.server.repositories.SQLs.SQL_GET_USER_SUBSCRIPTION_DETAILS;
@@ -62,6 +63,18 @@ public class AppRepository {
         }
 
         return subscriptions;
+    }
+
+    public List<String> getUsersSubscriptionByRuleId(String rule_id) {
+        
+        List<String> users = new ArrayList<>();
+        final SqlRowSet rs = template.queryForRowSet(SQL_GET_USERS_BY_SUBSCRIPTION_RULE_ID, rule_id);
+
+        while(rs.next()) {
+            users.add(rs.getString("username"));
+        }
+
+        return users;
     }
 
     public Ftx getFtx(String username) {

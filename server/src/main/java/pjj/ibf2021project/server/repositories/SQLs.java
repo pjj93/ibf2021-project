@@ -33,4 +33,6 @@ public interface SQLs {
                                 "update ftx "+
                                 "set api_key = ?, api_secret = ? "+
                                 "where username = ?";
+    public static final String SQL_GET_USERS_BY_SUBSCRIPTION_RULE_ID = 
+                                "select username from subscription where rule_id = ?";
 }
