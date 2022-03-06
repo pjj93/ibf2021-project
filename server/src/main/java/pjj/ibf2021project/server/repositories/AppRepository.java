@@ -12,7 +12,6 @@ import static pjj.ibf2021project.server.repositories.SQLs.SQL_UPDATE_USER_SUBSCR
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +57,9 @@ public class AppRepository {
             subscription.setDescription(rs.getString("description"));
             subscription.setEmail_notification(rs.getBoolean("email_notification"));
             subscription.setAuto_trade(rs.getBoolean("auto_trade"));
-            
-            logger.log(Level.INFO, "number of subscriptions >>> " + subscription.getDescription());
 
             subscriptions.add(subscription); // add into list
         }
-        
-        logger.log(Level.INFO, "number of subscriptions >>> " + subscriptions.size());
 
         return subscriptions;
     }
