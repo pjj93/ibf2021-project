@@ -21,7 +21,7 @@ public class EmailService{
     public void sendEmail(Tweet tweet, List<String> listEmailTo) {
 
         String[] emailTos = listEmailTo.toArray(String[]::new);
-        String emailFrom = "shadowysupercoder69420@gmail.com";
+        String emailFrom = System.getenv("GMAIL_USERNAME");
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailFrom);
