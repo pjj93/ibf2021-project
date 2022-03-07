@@ -3,6 +3,7 @@ package pjj.ibf2021project.server.services;
 import static pjj.ibf2021project.server.Constants.ENV_TWITTER_BEARER_TOKEN;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +30,9 @@ public class TwitterService {
     
     @Autowired
     private EmailService emailSvc;
+
+    @Autowired
+    private FtxService ftxSvc;
 
     @Autowired
     private AppRepository appRepo;
@@ -100,6 +104,11 @@ public class TwitterService {
                 try { 
                     emailSvc.sendEmail(tweet, appRepo.getUsersSubscriptionByRuleId(tweet.getRule_id())); 
                 } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ftxSvc.placeOrderHttpClient();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
