@@ -1,5 +1,7 @@
 package pjj.ibf2021project.server.controllers;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,12 @@ public class FtxRestController {
         
         ftxSvc.getBalance();
         return null;
+    }
+
+    @GetMapping(path="/placeorder")
+    public void placeorder() throws IOException {
+        // ftxSvc.NewOrder();
+        ftxSvc.placeOrderHttpClient();
     }
     
 }
