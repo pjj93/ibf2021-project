@@ -29,7 +29,6 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(form: any) {
-    console.log(form)
     this.http.post("/api/client/signup", form).subscribe({
       next: (resp) => {
         console.log(resp)

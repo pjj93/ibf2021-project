@@ -26,8 +26,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(form: User) {
-    console.log(form)
-
     this.http.post("/api/client/login", form).subscribe({
       next: (resp) => {
         console.log(resp);
